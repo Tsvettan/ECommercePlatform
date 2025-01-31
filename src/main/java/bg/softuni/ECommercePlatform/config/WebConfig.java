@@ -13,7 +13,10 @@ public class WebConfig implements WebMvcConfigurer {
     //are served from the src/main/resources/static directory
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/**")
-                .addResourceLocations("classpath:/static/");
+        registry.addResourceHandler("/**", "/images/**")
+                .addResourceLocations("classpath:/static/",
+                        "classpath:/static/images/",
+                        "classpath:/static/css/",
+                        "classpath:/static/js/");
     }
 }

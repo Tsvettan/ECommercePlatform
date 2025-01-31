@@ -1,9 +1,21 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
-    <title>Product Listings</title>
+    <meta charset="UTF-8">
+    <title>Shop - My E-Commerce</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
+<!-- Full-Width Hero Section -->
+<header class="full-page-hero">
+    <div class="overlay"></div>
+    <div class="hero-content text-center text-white">
+        <h1 class="display-3 fw-bold">Our Products</h1>
+        <p class="lead">Explore the latest collections at the best prices.</p>
+    </div>
+</header>
+
 <div class="container mt-4">
     <h1>Our Products</h1>
     <!-- Filters -->
@@ -25,19 +37,31 @@
         </form>
     </div>
 
-    <!-- Products Grid -->
-    <div class="row">
-        <div class="col-md-4 mb-4" th:each="product : ${products}">
-            <div class="card product-card">
-                <img th:src="${product.imageUrl}" class="card-img-top" alt="Product">
-                <div class="card-body text-center">
-                    <h5 class="card-title" th:text="${product.name}"></h5>
-                    <p class="text-success fw-bold" th:text="'$' + ${product.price}"></p>
-                    <a th:href="@{/products/{id}(id=${product.id})}" class="btn btn-primary">View Details</a>
+    <!-- Product Grid -->
+    <section class="container mt-5">
+        <h2 class="text-center">Featured Products</h2>
+        <div class="row mt-4">
+            <div class="col-md-4 col-sm-6" th:each="product : ${products}">
+                <div class="product-card">
+                    <img th:src="${product.imageUrl}" alt="Product Image" class="product-image">
+                    <div class="product-info">
+                        <h5 class="product-title" th:text="${product.name}"></h5>
+                        <p class="product-price" th:text="'$' + ${product.price}"></p>
+                        <div class="product-buttons">
+                            <a th:href="@{'/products/' + ${product.id}}" class="btn btn-outline-primary">View
+                                Details</a>
+                            <form method="post" action="/cart/add">
+                                <input type="hidden" name="productId" th:value="${product.id}">
+                                <input type="hidden" name="quantity" value="1">
+                                <button type="submit" class="btn btn-primary">Add to Cart</button>
+                            </form>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    </section>
+
     <nav>
         <ul class="pagination justify-content-center">
             <li class="page-item"><a class="page-link" href="?page=1">1</a></li>
@@ -45,5 +69,7 @@
         </ul>
     </nav>
 </div>
+
+<div th:insert="fragments/footer :: footer"></div>
 </body>
 </html>
