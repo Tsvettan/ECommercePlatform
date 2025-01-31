@@ -1,0 +1,62 @@
+spring:
+  datasource:
+    driverClassName: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3307/eCommercePlatform?allowPublicKeyRetrieval=true&useSSL=false&createDatabaseIfNotExist=true&serverTimezone=UTC
+    username: ${MYSQL_USER:root}
+    password: ${MYSQL_PASSWORD:Tsvettanovv_18}
+  jpa:
+    database-platform: org.hibernate.dialect.MySQLDialect
+    defer-datasource-initialization: true
+    properties:
+      hibernate:
+        format_sql: true
+    hibernate:
+      ddl-auto: update
+sql:
+  init:
+    mode: never
+security:
+  oauth2:
+    client:
+      registration:
+        github:
+          client_id: ${GITHUB_CLIENT:}
+          client-secret: ${GITHUB_SECRET:}
+          scope: user:email
+mvc:
+  hiddenmethod:
+    filter:
+      enabled: true
+
+ecom:
+  default.admin.pass: ${DEFAULT_ADMIN_PASSWORD:privatepassword}
+  remember.me.key: ${REMEMBER_ME_KEY:privatepassword}
+
+logging:
+  level:
+    org.hibernate.SQL: DEBUG
+    org.hibernate.orm.jdbc.bind: TRACE
+    org.springframework.security: TRACE
+
+org:
+  springframework:
+    web=DEBUG:
+
+mail:
+  host: smtp.gmail.com
+  port: 587
+  username: cecicvetanov32@gmail.com
+  password: Tsvettanovv.0042151900
+  properties:
+    mail:
+      smtp:
+        auth: true
+        starttls:
+          enable: true
+
+stripe:
+  secret-key: sk_test_51Qb3W02HzNfCiWdbVFoeSOS4dL1HrVTnGvYByEmygcgID7EycVnk6cLQOGYuNtGUOMQV5lOQUaGEwHQLpwGpW6lq00ru5vIP74
+  publishable-key: pk_test_51Qb3W02HzNfCiWdbh5unbiZbbKoC3HwoEfq2W8HBqNhtFj2cD9Ax1doTshp3qfUnn9vEO07m3iddNpRakN8s1vn400WwOZ7SN2
+
+server:
+  port: 8080

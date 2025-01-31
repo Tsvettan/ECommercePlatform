@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <title>Product Details</title>
+</head>
+<body>
+<h1 th:text="${product.name}"></h1>
+<p th:text="'Price: $' + ${product.price}"></p>
+<p th:text="'Category: ' + ${product.category.name}"></p>
+<p th:text="'Average Rating: ' + ${product.rating}"></p>
+
+<h2>Reviews</h2>
+<div class="star-rating">
+    <span th:each="i : ${#numbers.sequence(1, 5)}"
+          th:classappend="${i <= review.rating ? 'filled' : ''}"
+          class="star">&#9733;</span>                               <!-- Unicode for a star -->
+</div>
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-6">
+            <img th:src="${product.imageUrl}" class="img-fluid" alt="Product Image">
+        </div>
+        <div class="col-md-6">
+            <h1 th:text="${product.name}"></h1>
+            <p th:text="${product.description}"></p>
+            <h3 class="text-success fw-bold" th:text="'$' + ${product.price}"></h3>
+
+            <form method="post" th:action="@{/cart/add}">
+                <input type="hidden" name="productId" th:value="${product.id}">
+                <button type="submit" class="btn btn-success">Add to Cart</button>
+            </form>
+        </div>
+    </div>
+    <div th:each="review : ${reviews}">
+        <p><strong th:text="${review.user.username}"></strong> <span th:text="${review.rating}"></span> stars</p>
+        <p th:text="${review.comment}"></p>
+
+        <div th:if="${review.user.id == #authentication.principal.id}">
+            <form method="post" th:action="@{/products/{id}/reviews(id=${product.id})}">
+                <input type="hidden" name="rating" th:value="${review.rating}">
+                <label>
+                    <textarea name="comment" th:text="${review.comment}"></textarea>
+                </label>
+                <button type="submit">Edit</button>
+            </form>
+
+            <form method="post"
+                  th:action="@{/products/{id}/reviews/{reviewId}/delete(id=${product.id}, reviewId=${review.id})}">
+                <button type="submit">Delete</button>
+            </form>
+        </div>
+    </div>
+
+    <h2>Add a Review</h2>
+    <form method="post" th:action="@{/products/{id}/reviews(id=${product.id})}" th:object="${newReview}">
+        <label for="rating">Rating (1-5):</label>
+        <input type="number" id="rating" name="rating" min="1" max="5" th:field="*{rating}" required>
+        <br>
+        <label for="comment">Comment:</label>
+        <textarea id="comment" name="comment" th:field="*{comment}" required></textarea>
+        <br>
+        <button type="submit">Submit Review</button>
+    </form>
+</div>
+</body>
+</html>

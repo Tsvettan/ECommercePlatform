@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <title>Order History</title>
+</head>
+<body>
+<h1>Your Orders</h1>
+<h3>Order Details</h3>
+<p><strong>Order ID:</strong> <span th:text="${order.id}"></span></p>
+<p><strong>User:</strong> <span th:text="${order.user.username}"></span></p>
+<p><strong>Total:</strong> <span th:text="${order.total}"></span></p>
+
+<h4>Items:</h4>
+<ul>
+    <li th:each="item : ${order.items}">
+        <span th:text="${item.product.name}"></span> -
+        <span th:text="${item.quantity}"></span> x
+        <span th:text="${item.product.price}"></span>
+    </li>
+</ul>
+</body>
+</html>
