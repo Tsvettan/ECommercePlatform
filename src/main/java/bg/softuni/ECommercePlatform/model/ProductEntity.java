@@ -105,7 +105,7 @@ public class ProductEntity {
     }
 
     public String getImageUrl() {
-        return imageUrl;
+        return imageUrl != null ? imageUrl : "/images/placeholder.jpg";
     }
 
     public void setImageUrl(String imageUrl) {

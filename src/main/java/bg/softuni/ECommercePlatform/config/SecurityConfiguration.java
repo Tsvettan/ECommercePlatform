@@ -39,19 +39,19 @@ public class SecurityConfiguration {
                         .requestMatchers("/products", "/categories").permitAll()
                         .requestMatchers("/css/**", "/js/**", "/images/**").permitAll()
                         .requestMatchers("/categories/**", "/products/**").hasRole("ADMIN")
-                        .requestMatchers("/dashboard/**").hasAnyRole("ADMIN", "USER")
                         .requestMatchers("/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/cart", "/orders", "/checkout").authenticated()
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
                         .loginPage("/login")
                         .usernameParameter("username")
                         .passwordParameter("password")
-                        .defaultSuccessUrl("/", true)
+                        .defaultSuccessUrl("/?loginSuccess=true", true)
                         .permitAll()
                 )
                 .logout(logout -> logout
-                        .logoutSuccessUrl("/")
+                        .logoutSuccessUrl("/?logoutSuccess=true")
                         .permitAll()
                 )
                 .exceptionHandling(exceptions ->

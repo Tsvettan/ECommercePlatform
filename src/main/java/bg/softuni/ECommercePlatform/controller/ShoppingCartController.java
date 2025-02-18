@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/cart")
@@ -30,8 +31,9 @@ public class ShoppingCartController {
     @GetMapping
     public String viewCart(@AuthenticationPrincipal UserEntity user, Model model) {
         if (user == null) {
-            return "redirect:/login";
+            return "redirect:/login?error=You need to login to access the cart";
         }
+
         ShoppingCartEntity cart = shoppingCartService.getCartByUser(user);
         double totalCost = shoppingCartService.calculateTotalCost(user);
         model.addAttribute("cart", cart);
@@ -41,16 +43,21 @@ public class ShoppingCartController {
 
     @PostMapping("/add")
     public String addToCart(@RequestParam Long productId, @RequestParam int quantity,
-                            @AuthenticationPrincipal UserEntity user, Model model) {
-        try {
-            ProductEntity product = productService.getProductById(productId);
-            ShoppingCartEntity cart = shoppingCartService.getCartByUser(user);
-            shoppingCartService.addToCard(cart, product, quantity);
-        } catch (Exception e) {
-            model.addAttribute("error", "Unable to add product to cart: " + e.getMessage());
-            return "error";
+                            @AuthenticationPrincipal UserEntity user, RedirectAttributes redirectAttributes) {
+
+        if (user == null) {
+            return "redirect:/login";
         }
-        return "redirect:/cart";
+
+        ProductEntity product = productService.getProductById(productId);
+        ShoppingCartEntity cart = shoppingCartService.getCartByUser(user);
+
+        shoppingCartService.addToCard(cart, product, quantity);
+
+        redirectAttributes.addFlashAttribute("successMessage" + product.getName()
+                + " added to cart!");
+
+        return "redirect:/cart/add-success";
     }
 
     @PostMapping("/update")
