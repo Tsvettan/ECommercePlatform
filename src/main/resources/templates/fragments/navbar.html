@@ -3,47 +3,63 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>My E-Commerce</title>
+    <title>EliteWear</title>
 </head>
 <body>
-<nav class="navbar navbar-expand-lg">
+<nav class="navbar navbar-expand-lg navbar-light bg-white sticky-top shadow-sm">
     <div class="container">
-        <a class="navbar-brand" href="/">LuxuryShop</a>
+        <a class="navbar-brand elitewear-logo" href="/">ELITEWEAR</a>
+
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
         </button>
+
+        <div th:if="${param.loginSuccess}" class="alert alert-success text-center">
+            Welcome back! You have successfully logged in.
+        </div>
+
+        <div th:if="${param.logoutSuccess}" class="alert alert-info text-center">
+            You have successfully logged out.
+        </div>
+
+        <div th:if="${successMessage}" class="alert alert-success text-center">
+            <span th:text="${successMessage}"></span>
+        </div>
+
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
-                <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
-                <li class="nav-item"><a class="nav-link" href="/products">Shop</a></li>
-
-                <!-- Show Cart & Orders ONLY if User is Logged In -->
-                <li class="nav-item" th:if="${#authorization.expression('isAuthenticated()')}">
-                    <a class="nav-link" href="/cart">Cart 🛒</a>
+                <li class="nav-item">
+                    <a class="nav-link" href="/">Home</a>
                 </li>
-                <li class="nav-item" th:if="${#authorization.expression('isAuthenticated()')}">
-                    <a class="nav-link" href="/orders">My Orders 📦</a>
+                <li class="nav-item">
+                    <a class="nav-link" href="/login">Login</a>
                 </li>
-
-                <!-- Show User Dropdown If Logged In -->
-                <li class="nav-item dropdown" th:if="${#authorization.expression('isAuthenticated()')}">
-                    <a class="nav-link dropdown-toggle" href="#" id="userDropdown" data-bs-toggle="dropdown">
-                        👤 <span th:text="${#authentication.name}"></span>
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="/profile">Profile</a></li>
-                        <li><a class="dropdown-item" href="/orders">My Orders</a></li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item text-danger" href="/logout">Logout</a></li>
-                    </ul>
+                <li class="nav-item">
+                    <a class="nav-link" href="/register">Register</a>
                 </li>
-
-                <!-- Show Login Button If NOT Logged In -->
-                <li class="nav-item" th:if="!${#authorization.expression('isAuthenticated()')}">
-                    <a class="nav-link btn btn-primary text-white" href="/login">Login</a>
+                <li class="nav-item">
+                    <a class="nav-link" href="/cart">
+                        <i class="bi bi-cart"></i> Cart</a>
                 </li>
             </ul>
         </div>
+
+        <li class="nav-item dropdown ms-auto">
+            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">👤<span></span>
+            </a>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="/profile">Profile</a></li>
+                <li><a class="dropdown-item" href="/orders">My Orders</a></li>
+                <li>
+                    <hr class="dropdown-divider">
+                </li>
+                <li><a class="dropdown-item text-danger" href="/logout">Logout</a></li>
+            </ul>
+        </li>
+
+        <li class="nav-item" th:if="!${#authorization.expression('isAuthenticated()')}">
+            <a class="nav-link btn btn-primary text-white" href="/login">Login</a>
+        </li>
     </div>
 </nav>
 </body>

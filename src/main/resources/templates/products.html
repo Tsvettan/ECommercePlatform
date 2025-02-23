@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
-
 <header class="full-page-hero">
     <div class="overlay"></div>
     <div class="hero-content text-center text-white">
@@ -49,24 +48,17 @@
     </div>
 
     <!-- Product Grid -->
-    <section class="container mt-5">
-        <h2 class="text-center">Featured Products</h2>
-        <div class="row mt-4">
+    <section class="container mt-4">
+        <div class="row">
             <div class="col-md-4 col-sm-6" th:each="product : ${products}">
                 <div class="product-card">
-                    <img th:src="${product.imageUrl}" alt="Product Image" class="product-image">
-                    <div class="product-info">
+                    <a th:href="@{'/products/' + ${product.id}}">
+                        <img th:src="${product.imageUrl}" class="product-image" alt="Products">
+                    </a>
+                    <div class="product-info text-center">
                         <h5 class="product-title" th:text="${product.name}"></h5>
                         <p class="product-price" th:text="'$' + ${product.price}"></p>
-                        <div class="product-buttons">
-                            <a th:href="@{'/products/' + ${product.id}}" class="btn btn-outline-primary">View
-                                Details</a>
-                            <form method="post" action="/cart/add">
-                                <input type="hidden" name="productId" th:value="${product.id}">
-                                <input type="hidden" name="quantity" value="1">
-                                <button type="submit" class="btn btn-primary add-to-cart-btn">Add to Cart</button>
-                            </form>
-                        </div>
+                        <a th:href="@{'/products/' + ${product.id}}" class="btn btn-outline-primary">View Details</a>
                     </div>
                 </div>
             </div>
@@ -82,5 +74,6 @@
 </div>
 
 <div th:insert="fragments/footer :: footer"></div>
+<script src="/js/animations.js"></script>
 </body>
 </html>
