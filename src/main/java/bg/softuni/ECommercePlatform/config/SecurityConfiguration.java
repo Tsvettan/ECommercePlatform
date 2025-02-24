@@ -39,8 +39,8 @@ public class SecurityConfiguration {
                         .requestMatchers("/products", "/categories").permitAll()
                         .requestMatchers("/css/**", "/js/**", "/images/**").permitAll()
                         .requestMatchers("/categories/**", "/products/**").hasRole("ADMIN")
-                        .requestMatchers("/admin/**").hasRole("ADMIN")
-                        .requestMatchers("/cart", "/orders", "/checkout").authenticated()
+                        .requestMatchers("/admin/**", "/users/**").hasRole("ADMIN")
+                        .requestMatchers("/cart", "/orders", "/checkout", "/users/profile").authenticated()
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form

@@ -32,18 +32,33 @@ public class UserService {
         this.emailService = emailService;
     }
 
-    public void updateLastLogin(UserEntity user) {
-        user.setLastLogin(LocalDateTime.now());
-        userRepository.save(user);
+    private UserDTO convertToDTO(UserEntity user) {
+        return modelMapper.map(user, UserDTO.class);
     }
 
     public List<UserDTO> getAllUsers() {
         return userRepository.findAll()
                 .stream()
-                .map(user -> modelMapper.map(user, UserDTO.class))
+                .map(this::convertToDTO)
                 .collect(Collectors.toList());
     }
 
+    // Update user profile
+    public UserEntity updateUser(Long id, String username, String email) {
+        UserEntity user = getUserById(id);
+        user.setUsername(username);
+        user.setEmail(email);
+        return userRepository.save(user);
+    }
+
+    // Change Role (Admin only)
+    public void changeUserRole(Long id, Role newRole) {
+        UserEntity user = new UserEntity();
+        user.setRole(newRole);
+        userRepository.save(user);
+    }
+
+    // Register a new user
     public void registerUser(UserEntity user) {
         user.setRole(Role.USER);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -57,7 +72,6 @@ public class UserService {
         String link = "http://localhost:8080/confirm?token=" + token;
         emailService.sendConfirmationEmail(user.getEmail(), user.getUsername(), link);
     }
-
 
     public void confirmToken(String token) {
         ConfirmationToken confirmationToken = tokenRepository.findByToken(token)
@@ -89,7 +103,13 @@ public class UserService {
         return userRepository.findByEmail(email).isPresent();
     }
 
-    public UserDTO getUserById(Long id) {
-        return modelMapper.map(userRepository.findById(id).orElseThrow(), UserDTO.class);
+    public UserEntity getUserById(Long id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+    }
+
+    public UserEntity getUserByUsername(String username) {
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
     }
 }

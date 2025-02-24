@@ -1,21 +1,24 @@
 package bg.softuni.ECommercePlatform.controller;
 
 import bg.softuni.ECommercePlatform.dto.UserDTO;
+import bg.softuni.ECommercePlatform.enums.Role;
 import bg.softuni.ECommercePlatform.model.UserEntity;
 import bg.softuni.ECommercePlatform.service.UserService;
 import jakarta.validation.Valid;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
-@Controller
+@RestController
+@RequestMapping("/users")
 public class UserController {
 
     private final UserService userService;
@@ -24,6 +27,31 @@ public class UserController {
     public UserController(UserService userService, AuthenticationManager authenticationManager) {
         this.userService = userService;
         this.authenticationManager = authenticationManager;
+    }
+
+    @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
+    public List<UserDTO> getAllUsers() {
+        return userService.getAllUsers();
+    }
+
+    @GetMapping("/profile")
+    public UserEntity getProfile(Principal principal) {
+        return userService.getUserByUsername(principal.getName());
+    }
+
+    // Edit user profile
+    @PutMapping("/profile")
+    public UserEntity updateProfile(Principal principal, @RequestParam String username, @RequestParam String email) {
+        UserEntity user = getProfile(principal);
+        return userService.updateUser(user.getId(), username, email);
+    }
+
+    // Change user role (Admin only)
+    @PutMapping("/{id}/role")
+    @PreAuthorize("hasRole('ADMIN')")
+    public void changeUserRole(@PathVariable Long id, @RequestParam Role role) {
+        userService.changeUserRole(id, role);
     }
 
     @GetMapping("/register")
@@ -77,7 +105,6 @@ public class UserController {
             userService.confirmToken(token);
             model.addAttribute("message", "Email confirmed successfully. You can now log in.");
         } catch (Exception e) {
-//            Vulnerability found in dependency:
             model.addAttribute("error", e.getMessage());
         }
 
@@ -93,7 +120,7 @@ public class UserController {
 
     @GetMapping("/users/{id}")
     public String userDetails(@PathVariable Long id, Model model) {
-        UserDTO user = userService.getUserById(id);
+        UserEntity user = userService.getUserById(id);
         model.addAttribute("user", user);
         return "user-details";
     }
