@@ -88,6 +88,10 @@ public class UserService {
         tokenRepository.delete(confirmationToken);                      // Remove token after confirmation
     }
 
+    public void deleteUser(Long id) {
+        userRepository.deleteById(id);
+    }
+
     private String buildEmail(String username, String link) {
         return "<p>Hi " + username + ",</p>" +
                 "<p>Please confirm your email by clicking the link below:</p>" +

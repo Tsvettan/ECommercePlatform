@@ -11,51 +11,32 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-white sticky-top shadow-sm">
     <div class="container">
         <a class="navbar-brand elitewear-logo" href="/">ELITEWEAR</a>
-
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
         </button>
-
-        <div th:if="${param.loginSuccess}" class="alert alert-success text-center">
-            Welcome back! You have successfully logged in.
-        </div>
-
-        <div th:if="${param.logoutSuccess}" class="alert alert-info text-center">
-            You have successfully logged out.
-        </div>
-
-        <div th:if="${successMessage}" class="alert alert-success text-center">
-            <span th:text="${successMessage}"></span>
-        </div>
-
-        <!-- User Dropdown Menu (Only When Logged In) -->
-        <li class="nav-item dropdown ms-auto">
-            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
-                👤 <span></span>
-            </a>
-            <ul class="dropdown-menu dropdown-menu-end">
-                <li><a class="dropdown-item" href="/profile">Profile</a></li>
-                <li><a class="dropdown-item" href="/orders">My Orders</a></li>
-                <li>
-                    <hr class="dropdown-divider">
-                </li>
-                <li><a class="dropdown-item text-danger" href="/logout">Logout</a></li>
-            </ul>
-        </li>
-
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="/login">Login</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/register">Register</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/cart">Cart 🛒</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/orders">My Orders 📦</a>
+                <li class="nav-item"><a class="nav-link" href="/login">Login</a></li>
+                <li class="nav-item"><a class="nav-link" href="/register">Register</a></li>
+                <li class="nav-item"><a class="nav-link" href="/cart">Cart 🛒</a></li>
+                <li class="nav-item"><a class="nav-link" href="/orders">My Orders 📦</a></li>
+                <li class="nav-item"><a class="nav-link" th:if="${#authorization.expression('hasRole(''ADMIN'')')}"
+                                        href="/admin-dashboard">
+                    Admin Dashboard</a></li>
+
+                <li class="nav-item dropdown" th:if="${#authorization.expression('isAuthenticated()')}">
+                    <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+                       data-bs-toggle="dropdown">
+                        👤 <span th:text="${#authentication.name}"></span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" href="/profile">Profile</a></li>
+                        <li><a class="dropdown-item" href="/orders">My Orders</a></li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li><a class="dropdown-item text-danger" href="/logout">Logout</a></li>
+                    </ul>
                 </li>
             </ul>
         </div>
@@ -66,7 +47,7 @@
 <header class="full-page-hero">
     <div class="overlay"></div>
     <div class="hero-content text-center">
-        <h1 class="display-3 fw-bold">Discover the New Arrives</h1>
+        <h1 class="display-3 fw-bold">Discover the New Arrivals</h1>
         <p class="lead">Discover premium fashion for the elite.</p>
         <a href="/products" class="btn btn-lg btn-primary">Shop Now</a>
     </div>
@@ -110,7 +91,7 @@
         <div class="col-md-4">
             <div class="category">
                 <a href="/products?category=Accessories">
-                    <img class="accessories" src="" alt="Accessories">
+                    <img class="accessories" src="/images/accessories.png" alt="Accessories">
                     <div class="overlay">
                         <h2 class="text-white">Accessories</h2>
                     </div>
@@ -120,10 +101,10 @@
     </div>
 </section>
 
+<!-- Footer -->
 <div th:insert="fragments/footer :: footer"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.js"></script>
 <script src="/js/form-validation.js"></script>
 </body>
 </html>

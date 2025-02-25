@@ -14,6 +14,10 @@
             <span class="navbar-toggler-icon"></span>
         </button>
 
+        <li class="nav-item" th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
+            <a class="nav-link" href="/admin-dashboard">Admin Dashboard</a>
+        </li>
+
         <div th:if="${param.loginSuccess}" class="alert alert-success text-center">
             Welcome back! You have successfully logged in.
         </div>
@@ -45,7 +49,8 @@
         </div>
 
         <li class="nav-item dropdown ms-auto">
-            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">👤<span></span>
+            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+               data-bs-toggle="dropdown">👤<span></span>
             </a>
             <ul class="dropdown-menu">
                 <li><a class="dropdown-item" href="/profile">Profile</a></li>
