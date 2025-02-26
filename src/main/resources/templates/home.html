@@ -26,8 +26,7 @@
         </ul>
 
         <div class="user-menu" th:if="${#authorization.expression('isAuthenticated()')}">
-            <button class="user-toggle" id="user-toggle">
-                👤 <span th:text="${#authentication.name}"></span>
+            <button class="user-toggle" id="user-toggle">👤<span th:text="${#authentication.name}"></span>
             </button>
             <ul class="user-dropdown" id="user-dropdown">
                 <li><a href="/profile">Profile</a></li>

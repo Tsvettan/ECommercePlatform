@@ -6,6 +6,7 @@ import bg.softuni.ECommercePlatform.model.ConfirmationToken;
 import bg.softuni.ECommercePlatform.model.UserEntity;
 import bg.softuni.ECommercePlatform.repository.ConfirmationTokenRepository;
 import bg.softuni.ECommercePlatform.repository.UserRepository;
+import jakarta.annotation.PostConstruct;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -43,7 +44,6 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
-    // Update user profile
     public UserEntity updateUser(Long id, String username, String email) {
         UserEntity user = getUserById(id);
         user.setUsername(username);
@@ -51,14 +51,12 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    // Change Role (Admin only)
     public void changeUserRole(Long id, Role newRole) {
         UserEntity user = new UserEntity();
         user.setRole(newRole);
         userRepository.save(user);
     }
 
-    // Register a new user
     public void registerUser(UserEntity user) {
         user.setRole(Role.USER);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -105,6 +103,13 @@ public class UserService {
 
     public boolean isEmailTaken(String email) {
         return userRepository.findByEmail(email).isPresent();
+    }
+
+    public void updateUserRole(Long userId, Role role) {
+        UserEntity user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+        user.setRole(role);
+        userRepository.save(user);
     }
 
     public UserEntity getUserById(Long id) {
