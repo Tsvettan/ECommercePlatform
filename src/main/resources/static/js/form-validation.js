@@ -45,7 +45,7 @@ if (registerForm) {
         }
 
         if (!isValid) {
-            e.preventDefault(); // Prevent form submission if validation fails
+            e.preventDefault();     // Prevent form submission if validation fails
         }
     });
 

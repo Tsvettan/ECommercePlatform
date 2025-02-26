@@ -1,12 +1,59 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
-    <title>My E-Commerce Shop</title>
+    <title>EliteWear - Shop</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/products.css">
     <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/navbar.css">
 </head>
 <body>
+<nav class="elite-navbar">
+    <div class="navbar-container">
+        <a href="/" class="navbar-logo">ELITEWEAR</a>
+
+        <button class="menu-toggle" id="menu-toggle">
+            <span class="menu-icon"></span>
+        </button>
+
+        <ul class="nav-links" id="nav-links">
+            <li><a href="/products" class="nav-btn">Shop</a></li>
+            <li><a href="/cart" class="nav-btn">Cart</a></li>
+            <li><a href="/orders" class="nav-btn">Orders</a></li>
+            <li th:if="${#authorization.expression('hasRole(''ADMIN'')')}"><a href="/admin-dashboard" class="nav-btn">Admin</a>
+            </li>
+        </ul>
+
+        <div class="user-menu" th:if="${#authorization.expression('isAuthenticated()')}">
+            <button class="user-toggle" id="user-toggle">
+                👤 <span th:text="${#authentication.name}"></span>
+            </button>
+            <ul class="user-dropdown" id="user-dropdown">
+                <li><a href="/profile">Profile</a></li>
+                <li><a href="/orders">My Orders</a></li>
+                <li><a href="/logout" class="logout-btn">Logout</a></li>
+            </ul>
+        </div>
+
+        <!-- Login/Register Links (If Not Authenticated) -->
+        <div class="auth-links" th:if="!${#authorization.expression('isAuthenticated()')}">
+            <a href="/login" class="btn-login">Login</a>
+            <a href="/register" class="btn-register">Register</a>
+        </div>
+    </div>
+</nav>
+
+<script>
+    document.getElementById("menu-toggle").addEventListener("click", function() {
+        document.getElementById("nav-links").classList.toggle("active");
+    });
+
+    document.getElementById("user-toggle")?.addEventListener("click", function() {
+        document.getElementById("user-dropdown").classList.toggle("show");
+    });
+</script>
+
 <header class="full-page-hero">
     <div class="overlay"></div>
     <div class="hero-content text-center text-white">
@@ -15,65 +62,58 @@
     </div>
 </header>
 
-<div class="container text-center mt-4">
-    <a href="/products" class="btn btn-outline-primary">All</a>
-    <a href="/products?category=Men" class="btn btn-outline-primary">Men</a>
-    <a href="/products?category=Women" class="btn btn-outline-primary">Women</a>
-    <a href="/products?category=Kids" class="btn btn-outline-primary">Kids</a>
-</div>
+<div class="container mt-5">
+    <h2 class="text-center display-4 fw-bold">Shop the Latest Collection</h2>
 
-<div class="container mt-4">
-    <h1>Our Products</h1>
+    <div class="row">
+        <aside class="col-lg-3 col-md-4">
+            <div class="filter-box">
+                <h4>Filter By category</h4>
 
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <form class="d-flex">
-            <label>
-                <select class="form-select me-2" name="category">
-                    <option value="">All Categories</option>
-                    <option value="electronics">Electronics</option>
-                    <option value="fashion">Fashion</option>
-                    <option value="home">Home</option>
+                <ul class="filter-list">
+                    <li><a href="/products" class="btn btn-outline-primary">All</a></li>
+                    <li><a href="/products?category=men" class="btn btn-outline-primary">Men</a></li>
+                    <li><a href="/products?category=women" class="btn btn-outline-primary">Women</a></li>
+                    <li><a href="/products?category=kids" class="btn btn-outline-primary">Kids</a></li>
+                    <li><a href="/products?category=accessories" class="btn btn-outline-primary">Accessories</a></li>
+                </ul>
+
+                <h5>Price</h5>
+                <label for="priceRange"></label><input type="range" min="10" max="500" step="10" id="priceRange">
+                <p>Max Price: <span id="priceValue">$1000</span></p>
+
+                <h5>Sort By</h5>
+                <label for="sortOptions"></label><select id="sortOptions">
+                    <option value="newest">Newest</option>
+                    <option value="priceLow">Price: Low to High</option>
+                    <option value="priceHigh">Price: High to Low</option>
                 </select>
-            </label>
-            <label>
-                <select class="form-select me-2" name="sort">
-                    <option value="">Sort by</option>
-                    <option value="price-asc">Price: Low to High</option>
-                    <option value="price-desc">Price: High to Low</option>
-                    <option value="rating">Top Rated</option>
-                </select>
-            </label>
-            <button class="btn btn-primary" type="submit">Filter</button>
-        </form>
-    </div>
+            </div>
+        </aside>
 
-    <!-- Product Grid -->
-    <section class="container mt-4">
-        <div class="row">
-            <div class="col-md-4 col-sm-6" th:each="product : ${products}">
-                <div class="product-card">
-                    <a th:href="@{'/products/' + ${product.id}}">
-                        <img th:src="${product.imageUrl}" class="product-image" alt="Products">
-                    </a>
-                    <div class="product-info text-center">
-                        <h5 class="product-title" th:text="${product.name}"></h5>
-                        <p class="product-price" th:text="'$' + ${product.price}"></p>
-                        <a th:href="@{'/products/' + ${product.id}}" class="btn btn-outline-primary">View Details</a>
+        <!-- Products Section -->
+        <section class="col-lg-9 col-md-8">
+            <div class="row" id="product-list">
+                <div class="col-md-4 mb-4" th:each="product : ${products}">
+                    <div class="product-card">
+                        <a th:href="@{/product/{id}(id=${product.id})}">
+                            <img th:src="@{${product.imageUrl}}" class="product-image" th:alt="${product.name}" alt="">
+                        </a>
+                        <div class="product-info">
+                            <h5 th:text="${product.name}"></h5>
+                            <p class="price" th:text="'$' + ${product.price}"></p>
+                            <button class="btn-add-to-cart">Add to Cart</button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
-
-    <nav>
-        <ul class="pagination justify-content-center">
-            <li class="page-item"><a class="page-link" href="?page=1">1</a></li>
-            <li class="page-item"><a class="page-link" href="?page=2">2</a></li>
-        </ul>
-    </nav>
+        </section>
+    </div>
 </div>
 
 <div th:insert="fragments/footer :: footer"></div>
-<script src="/js/animations.js"></script>
+
+<script src="/js/products.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

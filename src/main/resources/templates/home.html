@@ -6,39 +6,40 @@
     <title>EliteWear &amp; Elevate Your Style</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/navbar.css">
 </head>
 <body>
-<nav class="navbar navbar-expand-lg navbar-light bg-white sticky-top shadow-sm">
-    <div class="container">
-        <a class="navbar-brand elitewear-logo" href="/">ELITEWEAR</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto">
-                <li class="nav-item"><a class="nav-link" href="/login">Login</a></li>
-                <li class="nav-item"><a class="nav-link" href="/register">Register</a></li>
-                <li class="nav-item"><a class="nav-link" href="/cart">Cart 🛒</a></li>
-                <li class="nav-item"><a class="nav-link" href="/orders">My Orders 📦</a></li>
-                <li class="nav-item"><a class="nav-link" th:if="${#authorization.expression('hasRole(''ADMIN'')')}"
-                                        href="/admin-dashboard">
-                    Admin Dashboard</a></li>
+<nav class="elite-navbar">
+    <div class="navbar-container">
+        <a href="/" class="navbar-logo">ELITEWEAR</a>
 
-                <li class="nav-item dropdown" th:if="${#authorization.expression('isAuthenticated()')}">
-                    <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
-                       data-bs-toggle="dropdown">
-                        👤 <span th:text="${#authentication.name}"></span>
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-end">
-                        <li><a class="dropdown-item" href="/profile">Profile</a></li>
-                        <li><a class="dropdown-item" href="/orders">My Orders</a></li>
-                        <li>
-                            <hr class="dropdown-divider">
-                        </li>
-                        <li><a class="dropdown-item text-danger" href="/logout">Logout</a></li>
-                    </ul>
-                </li>
+        <button class="menu-toggle" id="menu-toggle">
+            <span class="menu-icon"></span>
+        </button>
+
+        <ul class="nav-links" id="nav-links">
+            <li><a href="/products" class="nav-btn">Shop</a></li>
+            <li><a href="/cart" class="nav-btn">Cart</a></li>
+            <li><a href="/orders" class="nav-btn">Orders</a></li>
+            <li th:if="${#authorization.expression('hasRole(''ADMIN'')')}"><a href="/admin-dashboard" class="nav-btn">Admin</a>
+            </li>
+        </ul>
+
+        <div class="user-menu" th:if="${#authorization.expression('isAuthenticated()')}">
+            <button class="user-toggle" id="user-toggle">
+                👤 <span th:text="${#authentication.name}"></span>
+            </button>
+            <ul class="user-dropdown" id="user-dropdown">
+                <li><a href="/profile">Profile</a></li>
+                <li><a href="/orders">My Orders</a></li>
+                <li><a href="/logout" class="logout-btn">Logout</a></li>
             </ul>
+        </div>
+
+        <!-- Login/Register Links (If Not Authenticated) -->
+        <div class="auth-links" th:if="!${#authorization.expression('isAuthenticated()')}">
+            <a href="/login" class="btn-login">Login</a>
+            <a href="/register" class="btn-register">Register</a>
         </div>
     </div>
 </nav>
@@ -47,61 +48,64 @@
 <header class="full-page-hero">
     <div class="overlay"></div>
     <div class="hero-content text-center">
-        <h1 class="display-3 fw-bold">Discover the New Arrivals</h1>
-        <p class="lead">Discover premium fashion for the elite.</p>
-        <a href="/products" class="btn btn-lg btn-primary">Shop Now</a>
+        <h1 class="display-2 fw-bold text-uppercase">The Future of Fashion</h1>
+        <p class="lead">Discover premium fashion tailored for the elite.</p>
+        <a href="/products" class="btn">Shop Now</a>
     </div>
 </header>
 
-<!-- Product Categories -->
+<script>
+    document.getElementById("menu-toggle").addEventListener("click", function() {
+        document.getElementById("nav-links").classList.toggle("active");
+    });
+
+    document.getElementById("user-toggle")?.addEventListener("click", function() {
+        document.getElementById("user-dropdown").classList.toggle("show");
+    });
+</script>
+
 <section class="container mt-5">
-    <h2 class="text-center">Explore Our Collections</h2>
-    <div class="row text-center mt-4">
-        <div class="col-md-4">
-            <div class="category">
-                <a href="/products?category=men">
-                    <img class="clothing-main" src="images/manPhotoModel.png" alt="Men collection">
-                    <div class="overlay">
-                        <h2 class="text-white">Men</h2>
-                    </div>
-                </a>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="category">
-                <a href="/products?category=women">
-                    <img class="clothing-woman" alt="clothing design for woman" src="/images/clothingWoman.png"/>
-                    <div class="overlay">
-                        <h2 class="text-white">Women</h2>
-                    </div>
-                </a>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="category">
-                <a href="/products?category=kids">
-                    <img class="clothing-kids" src="/images/kidsPhoto.png" alt="Kids">
-                    <div class="overlay">
-                        <h2 class="text-white">Kids</h2>
-                    </div>
+    <h2 class="text-center display-4 fw-bold">Explore Our Collections</h2>
+    <div class="row text-center mt-5 justify-content-center">
+
+        <div class="col-lg-3 col-md-6">
+            <div class="category-box">
+                <a href="/products?category=men" class="category-link">
+                    <img class="category-img" src="/images/manPhotoModel.png" alt="Men Collection">
+                    <div class="category-title">Men</div>
                 </a>
             </div>
         </div>
 
-        <div class="col-md-4">
-            <div class="category">
-                <a href="/products?category=Accessories">
-                    <img class="accessories" src="/images/accessories.png" alt="Accessories">
-                    <div class="overlay">
-                        <h2 class="text-white">Accessories</h2>
-                    </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="category-box">
+                <a href="/products?category=women" class="category-link">
+                    <img class="category-img" src="/images/clothingWoman.png" alt="Women Collection">
+                    <div class="category-title">Women</div>
+                </a>
+            </div>
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+            <div class="category-box">
+                <a href="/products?category=kids" class="category-link">
+                    <img class="category-img" src="/images/kidsPhoto.png" alt="Kids Collection">
+                    <div class="category-title">Kids</div>
+                </a>
+            </div>
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+            <div class="category-box">
+                <a href="/products?category=accessories" class="category-link">
+                    <img class="category-img" src="/images/accessories.png" alt="Accessories">
+                    <div class="category-title">Accessories</div>
                 </a>
             </div>
         </div>
     </div>
 </section>
 
-<!-- Footer -->
 <div th:insert="fragments/footer :: footer"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
