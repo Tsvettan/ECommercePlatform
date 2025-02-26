@@ -3,6 +3,7 @@ package bg.softuni.ECommercePlatform.model;
 import bg.softuni.ECommercePlatform.enums.Status;
 import jakarta.persistence.*;
 
+import java.sql.Date;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -30,6 +31,9 @@ public class OrderEntity {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Status paymentStatus = Status.PENDING;
+
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime createdAt = LocalDateTime.now();
 
     public OrderEntity() {
         this.orderDate = LocalDateTime.now();
@@ -82,5 +86,13 @@ public class OrderEntity {
 
     public void setPaymentStatus(Status paymentStatus) {
         this.paymentStatus = paymentStatus;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 }

@@ -9,6 +9,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -42,5 +43,23 @@ public class OrderService {
                 .orElseThrow(() -> new IllegalArgumentException("Order not found"));
         order.setStatus(Status.valueOf(status));
         orderRepository.save(order);
+    }
+
+    public Long getTotalOrders() {
+        return orderRepository.count();
+    }
+
+    public Long getTotalRevenue() {
+        return orderRepository.count();
+    }
+
+    public Map<String, Integer> getOrderStats() {
+        return orderRepository
+                .findAll()
+                .stream()
+                .collect(Collectors.groupingBy(
+                        order -> order.getCreatedAt().toLocalDate().toString(),
+                        Collectors.summingInt(order -> 1)
+                ));
     }
 }

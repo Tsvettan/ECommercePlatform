@@ -5,10 +5,14 @@ import bg.softuni.ECommercePlatform.model.ProductEntity;
 import bg.softuni.ECommercePlatform.service.OrderService;
 import bg.softuni.ECommercePlatform.service.ProductService;
 import bg.softuni.ECommercePlatform.service.UserService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/admin")
@@ -23,6 +27,22 @@ public class AdminController {
         this.productService = productService;
         this.userService = userService;
         this.orderService = orderService;
+    }
+
+    @GetMapping("/stats")
+    public ResponseEntity<Map<String, Object>> getAdminStats() {
+        Map<String, Object> stats = new HashMap<>();
+        stats.put("totalUsers", userService.getTotalUsers());
+        stats.put("totalOrders", orderService.getTotalOrders());
+        stats.put("totalRevenue", orderService.getTotalRevenue());
+
+        Map<String, Integer> orderStats = orderService.getOrderStats();
+        stats.put("orderStats", Map.of(
+                "dates", orderStats.keySet(),
+                "counts", orderStats.values()
+        ));
+
+        return ResponseEntity.ok(stats);
     }
 
     @GetMapping

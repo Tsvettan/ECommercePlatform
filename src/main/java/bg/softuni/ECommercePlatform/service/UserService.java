@@ -121,4 +121,8 @@ public class UserService {
         return userRepository.findByUsername(username)
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
     }
+
+    public Long getTotalUsers() {
+        return userRepository.count();
+    }
 }

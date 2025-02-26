@@ -21,12 +21,13 @@
             <li><a href="/products" class="nav-btn">Shop</a></li>
             <li><a href="/cart" class="nav-btn">Cart</a></li>
             <li><a href="/orders" class="nav-btn">Orders</a></li>
-            <li th:if="${#authorization.expression('hasRole(''ADMIN'')')}"><a href="/admin-dashboard" class="nav-btn">Admin</a>
+            <li th:if="${#authorization.expression('hasRole(''ADMIN'')')}"><a href="/dashboard"
+                                                                              class="nav-btn">Admin</a>
             </li>
         </ul>
 
         <div class="user-menu" th:if="${#authorization.expression('isAuthenticated()')}">
-            <button class="user-toggle" id="user-toggle">👤<span th:text="${#authentication.name}"></span>
+            <button class="user-toggle" id="user-toggle"> 👤 <span th:text="${#authentication.name}"></span>
             </button>
             <ul class="user-dropdown" id="user-dropdown">
                 <li><a href="/profile">Profile</a></li>
