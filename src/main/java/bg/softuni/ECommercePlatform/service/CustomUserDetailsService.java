@@ -1,5 +1,6 @@
 package bg.softuni.ECommercePlatform.service;
 
+import bg.softuni.ECommercePlatform.model.UserEntity;
 import bg.softuni.ECommercePlatform.repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -17,7 +18,15 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
+        UserEntity user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+        System.out.println("🔍 Loaded user: " + user.getUsername() + " with role: " + user.getRole());
+
+        return org.springframework.security.core.userdetails.User.builder()
+                .username(user.getUsername())
+                .password(user.getPassword())
+                .roles(user.getRole().name())
+                .build();
     }
 }

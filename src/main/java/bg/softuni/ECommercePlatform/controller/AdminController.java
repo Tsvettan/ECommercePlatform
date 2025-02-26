@@ -25,10 +25,15 @@ public class AdminController {
         this.orderService = orderService;
     }
 
+    @GetMapping
+    public String adminDashboard() {
+        return "admin/dashboard";
+    }
+
     @GetMapping("/users")
     public String manageUsers(Model model) {
         model.addAttribute("users", userService.getAllUsers());
-        return "users";
+        return "/admin/users";
     }
 
     @PostMapping("/update-role")
