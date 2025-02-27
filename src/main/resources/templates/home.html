@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EliteWear &amp; Elevate Your Style</title>
+    <title>ELITEWEAR | Elevate Your Style</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="/css/styles.css">
     <link rel="stylesheet" href="/css/navbar.css">
@@ -20,17 +20,22 @@
         <ul class="nav-links" id="nav-links">
             <li><a href="/products" class="nav-btn">Shop</a></li>
             <li><a href="/cart" class="nav-btn">Cart</a></li>
-            <li><a href="/orders" class="nav-btn">Orders</a></li>
+            <li th:if="${#authorization.expression('hasRole(''ADMIN'')')}"><a href="/orders"
+                                                                              class="nav-btn">Orders</a>
+            </li>
             <li th:if="${#authorization.expression('hasRole(''ADMIN'')')}"><a href="/dashboard"
                                                                               class="nav-btn">Admin</a>
             </li>
         </ul>
 
         <div class="user-menu" th:if="${#authorization.expression('isAuthenticated()')}">
-            <button class="user-toggle" id="user-toggle"> 👤 <span th:text="${#authentication.name}"></span>
+            <button class="user-toggle" id="user-toggle">
+                <span th:text="${#authentication.name}"></span> 👤
             </button>
+
             <ul class="user-dropdown" id="user-dropdown">
                 <li><a href="/profile">Profile</a></li>
+                <li><a href="/admin">Dashboard</a></li>
                 <li><a href="/orders">My Orders</a></li>
                 <li><a href="/logout" class="logout-btn">Logout</a></li>
             </ul>
