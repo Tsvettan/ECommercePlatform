@@ -26,22 +26,30 @@
             </li>
         </ul>
 
-        <div class="user-menu" th:if="${#authorization.expression('isAuthenticated()')}">
-            <button class="user-toggle" id="user-toggle">
-                👤 <span th:text="${#authentication.name}"></span>
-            </button>
-            <ul class="user-dropdown" id="user-dropdown">
-                <li><a href="/profile">Profile</a></li>
-                <li><a href="/orders">My Orders</a></li>
-                <li><a href="/logout" class="logout-btn">Logout</a></li>
-            </ul>
+        <div class="user-menu">
+            <span class="user-icon" id="user-icon">👤</span>
+            <div class="user-dropdown" id="user-dropdown">
+                <form th:if="!${#authorization.expression('isAuthenticated()')}" method="post" action="/login">
+                    <input type="text" name="username" placeholder="Username" required>
+                    <input type="password" name="password" placeholder="Password" required>
+                    <button type="submit">Login</button>
+                </form>
+                <a th:if="!${#authorization.expression('isAuthenticated()')}" href="/register">Create an Account</a>
+
+                <ul th:if="${#authorization.expression('isAuthenticated()')}" class="user-menu-list">
+                    <li><a href="/profile">Profile</a></li>
+                    <li><a href="/admin">Dashboard</a></li>
+                    <li><a href="/orders">My Orders</a></li>
+                    <li><a href="/logout" class="logout-btn">Logout</a></li>
+                </ul>
+            </div>
         </div>
 
-        <!-- Login/Register Links (If Not Authenticated) -->
-        <div class="auth-links" th:if="!${#authorization.expression('isAuthenticated()')}">
-            <a href="/login" class="btn-login">Login</a>
-            <a href="/register" class="btn-register">Register</a>
-        </div>
+        <!--        &lt;!&ndash; Login/Register Links (If Not Authenticated) &ndash;&gt;-->
+        <!--        <div class="auth-links" th:if="!${#authorization.expression('isAuthenticated()')}">-->
+        <!--            <a href="/login" class="btn-login">Login</a>-->
+        <!--            <a href="/register" class="btn-register">Register</a>-->
+        <!--        </div>-->
     </div>
 </nav>
 
@@ -50,67 +58,56 @@
         document.getElementById("nav-links").classList.toggle("active");
     });
 
-    document.getElementById("user-toggle")?.addEventListener("click", function() {
-        document.getElementById("user-dropdown").classList.toggle("show");
+    document.getElementById("user-icon").addEventListener("mouseover", function() {
+        document.getElementById("user-dropdown").classList.add("show");
+    });
+
+    document.getElementById("user-dropdown").addEventListener("mouseleave", function() {
+        document.getElementById("user-dropdown").classList.remove("show");
     });
 </script>
 
-<header class="full-page-hero">
-    <div class="overlay"></div>
+<header class="shop-header">
     <div class="hero-content text-center text-white">
-        <h1 class="display-3 fw-bold">Our Products</h1>
-        <p class="lead">Explore the latest collections at the best prices.</p>
+        <h1>Discover Our Latest Collection</h1>
+        <p>Explore the finest fashion pieces available.</p>
     </div>
 </header>
 
-<div class="container mt-5">
-    <h2 class="text-center display-4 fw-bold">Shop the Latest Collection</h2>
+<section class="filter-section">
+    <form method="get" action="/products">
+        <label>
+            <select name="category">
+                <option value="">All Categories</option>
+                <option value="men">Men</option>
+                <option value="women">Women</option>
+                <option value="kids">Kids</option>
+                <option value="accessories">Accessories</option>
+            </select>
+        </label>
+        <label>
+            <select name="sort">
+                <option value="latest">Latest</option>
+                <option value="price-asc">Price: Low to High</option>
+                <option value="price-desc">Price: High to Low</option>
+            </select>
+        </label>
+        <button type="submit">Filter</button>
+    </form>
+</section>
 
-    <div class="row">
-        <aside class="col-lg-3 col-md-4">
-            <div class="filter-box">
-                <h4>Filter By category</h4>
-
-                <ul class="filter-list">
-                    <li><a href="/products" class="btn btn-outline-primary">All</a></li>
-                    <li><a href="/products?category=men" class="btn btn-outline-primary">Men</a></li>
-                    <li><a href="/products?category=women" class="btn btn-outline-primary">Women</a></li>
-                    <li><a href="/products?category=kids" class="btn btn-outline-primary">Kids</a></li>
-                    <li><a href="/products?category=accessories" class="btn btn-outline-primary">Accessories</a></li>
-                </ul>
-
-                <h5>Price</h5>
-                <label for="priceRange"></label><input type="range" min="10" max="500" step="10" id="priceRange">
-                <p>Max Price: <span id="priceValue">$1000</span></p>
-
-                <h5>Sort By</h5>
-                <label for="sortOptions"></label><select id="sortOptions">
-                    <option value="newest">Newest</option>
-                    <option value="priceLow">Price: Low to High</option>
-                    <option value="priceHigh">Price: High to Low</option>
-                </select>
+<section class="products-grid">
+    <div th:each="product : ${products}" class="product-card">
+        <a th:href="@{/products/{id}(id=${product.id})}">
+            <img th:src="${product.imageUrl}" alt="Product Image">
+            <div class="product-info">
+                <h2 th:text="${product.name}"></h2>
+                <p th:text="${product.price} + ' $'"></p>
+                <button class="add-to-cart">Add to Cart</button>
             </div>
-        </aside>
-
-        <!-- Products Section -->
-        <section class="col-lg-9 col-md-8">
-            <div class="row" id="product-list">
-                <div class="col-md-4 mb-4" th:each="product : ${products}">
-                    <div class="product-card">
-                        <a th:href="@{/product/{id}(id=${product.id})}">
-                            <img th:src="@{${product.imageUrl}}" class="product-image" th:alt="${product.name}" alt="">
-                        </a>
-                        <div class="product-info">
-                            <h5 th:text="${product.name}"></h5>
-                            <p class="price" th:text="'$' + ${product.price}"></p>
-                            <button class="btn-add-to-cart">Add to Cart</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
+        </a>
     </div>
-</div>
+</section>
 
 <div th:insert="fragments/footer :: footer"></div>
 

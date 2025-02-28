@@ -92,7 +92,7 @@ public class ProductController {
             }
         }
 
-        model.addAttribute("products", products);
+        model.addAttribute("products", productService.getAllProducts());
         return "products";
     }
 

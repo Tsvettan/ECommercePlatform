@@ -23,22 +23,34 @@
             </li>
         </ul>
 
-        <div class="user-menu" th:if="${#authorization.expression('isAuthenticated()')}">
-            <button class="user-toggle" id="user-toggle">
-                👤 <span th:text="${#authentication.name}"></span>
-            </button>
-            <ul class="user-dropdown" id="user-dropdown">
-                <li><a href="/profile">Profile</a></li>
-                <li><a href="/orders">My Orders</a></li>
-                <li><a href="/logout" class="logout-btn">Logout</a></li>
-            </ul>
+        <div class="user-menu">
+            <span class="user-icon" id="user-icon">👤</span>
+            <div class="user-dropdown" id="user-dropdown">
+                <form th:if="!${#authorization.expression('isAuthenticated()')}" method="post" action="/login">
+                    <label>
+                        <input type="text" name="username" placeholder="Username" required>
+                    </label>
+                    <label>
+                        <input type="password" name="password" placeholder="Password" required>
+                    </label>
+                    <button type="submit">Login</button>
+                </form>
+                <a th:if="!${#authorization.expression('isAuthenticated()')}" href="/register">Create an Account</a>
+
+                <ul th:if="${#authorization.expression('isAuthenticated()')}" class="user-menu-list">
+                    <li><a href="/profile">Profile</a></li>
+                    <li><a href="/admin">Dashboard</a></li>
+                    <li><a href="/orders">My Orders</a></li>
+                    <li><a href="/logout" class="logout-btn">Logout</a></li>
+                </ul>
+            </div>
         </div>
 
-        <!-- Login/Register Links (If Not Authenticated) -->
-        <div class="auth-links" th:if="!${#authorization.expression('isAuthenticated()')}">
-            <a href="/login" class="btn-login">Login</a>
-            <a href="/register" class="btn-register">Register</a>
-        </div>
+        <!--        &lt;!&ndash; Login/Register Links (If Not Authenticated) &ndash;&gt;-->
+        <!--        <div class="auth-links" th:if="!${#authorization.expression('isAuthenticated()')}">-->
+        <!--            <a href="/login" class="btn-login">Login</a>-->
+        <!--            <a href="/register" class="btn-register">Register</a>-->
+        <!--        </div>-->
     </div>
 </nav>
 
@@ -47,8 +59,12 @@
         document.getElementById("nav-links").classList.toggle("active");
     });
 
-    document.getElementById("user-toggle")?.addEventListener("click", function() {
-        document.getElementById("user-dropdown").classList.toggle("show");
+    document.getElementById("user-icon").addEventListener("mouseover", function() {
+        document.getElementById("user-dropdown").classList.add("show");
+    });
+
+    document.getElementById("user-dropdown").addEventListener("mouseleave", function() {
+        document.getElementById("user-dropdown").classList.remove("show");
     });
 </script>
 </body>
