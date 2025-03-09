@@ -2,11 +2,7 @@
 function togglePassword(inputId) {
     const input = document.getElementById(inputId);
     if (input) {
-        if (input.type === "password") {
-            input.type = "text";
-        } else {
-            input.type = "password";
-        }
+        input.type = input.type === "password" ? "text" : "password";
     }
 }
 
@@ -45,7 +41,7 @@ if (registerForm) {
         }
 
         if (!isValid) {
-            e.preventDefault();     // Prevent form submission if validation fails
+            e.preventDefault(); // Prevent form submission if validation fails
         }
     });
 
@@ -67,4 +63,4 @@ if (registerForm) {
             }
         });
     }
-}
+});

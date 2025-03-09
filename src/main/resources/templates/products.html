@@ -40,25 +40,16 @@
                     </label>
                     <button type="submit">Login</button>
                 </form>
-                <p>Don't have an account? <a href="/register">Create One</a></p>
+                <p>Don't have an account? <a href="/register">Create an Account</a></p>
             </div>
+        </div>
+
+        <div class="navbar-auth">
+            <a href="/login" class="btn-auth btn-login">Login</a>
+            <a href="/register" class="btn-auth btn-register">Register</a>
         </div>
     </div>
 </nav>
-
-<script>
-    document.getElementById("menu-toggle").addEventListener("click", function() {
-        document.getElementById("nav-links").classList.toggle("active");
-    });
-
-    document.getElementById("user-icon").addEventListener("mouseover", function() {
-        document.getElementById("user-dropdown").classList.add("show");
-    });
-
-    document.getElementById("user-dropdown").addEventListener("mouseleave", function() {
-        document.getElementById("user-dropdown").classList.remove("show");
-    });
-</script>
 
 <header class="shop-header">
     <div class="hero-content text-center text-white">
