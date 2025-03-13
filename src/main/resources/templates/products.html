@@ -58,26 +58,31 @@
     </div>
 </header>
 
-<section class="filter-section">
-    <form method="get" action="/products">
-        <label>
-            <select name="category">
-                <option value="">All Categories</option>
-                <option value="men">Men</option>
-                <option value="women">Women</option>
-                <option value="kids">Kids</option>
-                <option value="accessories">Accessories</option>
-            </select>
-        </label>
-        <label>
-            <select name="sort">
-                <option value="latest">Latest</option>
-                <option value="price-asc">Price: Low to High</option>
-                <option value="price-desc">Price: High to Low</option>
-            </select>
-        </label>
-        <button type="submit">Filter</button>
-    </form>
+<section class="products-page container">
+    <h2 class="text-center my-4">Explore Our Collection</h2>
+
+    <!-- Category Filter -->
+    <div class="filter-bar">
+        <a href="/products?category=men" class="filter-btn">Men</a>
+        <a href="/products?category=women" class="filter-btn">Women</a>
+        <a href="/products?category=kids" class="filter-btn">Kids</a>
+        <a href="/products?category=accessories" class="filter-btn">Accessories</a>
+        <a href="/products" class="filter-btn all-btn">All Products</a>
+    </div>
+
+    <!-- Products Grid -->
+    <div class="products-grid">
+        <div th:each="product : ${products}" class="product-card">
+            <a th:href="@{/products/{id}(id=${product.id})}" class="product-link">
+                <img th:src="${product.imageUrl}" alt="Product Image" class="product-image"/>
+                <div class="product-info">
+                    <h3 th:text="${product.name}" class="product-title"></h3>
+                    <p th:text="${product.price + ' $'}" class="product-price"></p>
+                    <button class="btn-add-to-cart" th:attr="data-product-id=${product.id}">Add to Cart</button>
+                </div>
+            </a>
+        </div>
+    </div>
 </section>
 
 <section class="products-grid">
