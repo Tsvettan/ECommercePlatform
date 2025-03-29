@@ -45,22 +45,9 @@
             <a href="/login" class="btn-auth btn-login">Login</a>
             <a href="/register" class="btn-auth btn-register">Register</a>
         </div>
-
     </div>
 </nav>
 
-<script>
-    document.getElementById("menu-toggle").addEventListener("click", function() {
-        document.getElementById("nav-links").classList.toggle("active");
-    });
-
-    document.getElementById("user-icon").addEventListener("mouseover", function() {
-        document.getElementById("user-dropdown").classList.add("show");
-    });
-
-    document.getElementById("user-dropdown").addEventListener("mouseleave", function() {
-        document.getElementById("user-dropdown").classList.remove("show");
-    });
-</script>
+<script src="/js/navbar.js"></script>
 </body>
 </html>

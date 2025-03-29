@@ -4,6 +4,7 @@ import bg.softuni.ECommercePlatform.dto.UserDTO;
 import bg.softuni.ECommercePlatform.enums.Role;
 import bg.softuni.ECommercePlatform.model.UserEntity;
 import bg.softuni.ECommercePlatform.service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -47,7 +48,6 @@ public class UserController {
         return userService.updateUser(user.getId(), username, email);
     }
 
-    // Change user role (Admin only)
     @PutMapping("/{id}/role")
     @PreAuthorize("hasRole('ADMIN')")
     public void changeUserRole(@PathVariable Long id, @RequestParam Role role) {
@@ -64,39 +64,43 @@ public class UserController {
     public String registerUser(
             @Valid @ModelAttribute("user") UserEntity user,
             BindingResult bindingResult,
-            Model model) {
-        userService.registerUser(user);
+            Model model,
+            HttpServletRequest request) {
 
+        // 1️⃣ Check for validation errors
         if (bindingResult.hasErrors()) {
+            return "register";  // Reload the register page if validation fails
+        }
+
+        // 2️⃣ Check if username or email is already taken
+        if (userService.isUsernameTaken(user.getUsername())) {
+            model.addAttribute("usernameError", "Username is already taken");
+            return "register";
+        }
+        if (userService.isEmailTaken(user.getEmail())) {
+            model.addAttribute("emailError", "Email is already taken");
             return "register";
         }
 
+        // 3️⃣ Register user & encrypt password
+        userService.registerUser(user);
+
+        // 4️⃣ Try to manually authenticate user after registration
         try {
-            UsernamePasswordAuthenticationToken authRequest =
+            Authentication authRequest =
                     new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword());
 
-            // Authenticate the user
             Authentication auth = authenticationManager.authenticate(authRequest);
-
-            // Set the authentication in the SecurityContext
             SecurityContextHolder.getContext().setAuthentication(auth);
+
+            request.getSession().setAttribute("SPRING_SECURITY_CONTEXT", SecurityContextHolder.getContext());
 
         } catch (Exception e) {
             e.printStackTrace();
             return "redirect:/register?error";
         }
 
-        if (userService.isUsernameTaken(user.getUsername())) {
-            model.addAttribute("usernameError", "Username is already taken");
-            return "register";
-        }
-
-        if (userService.isEmailTaken(user.getEmail())) {
-            model.addAttribute("emailError", "Email is already taken");
-            return "register";
-        }
-
-        return "redirect:/login";
+        return "redirect:/home?registerSuccess"; // Redirect to home page after registration
     }
 
     @GetMapping("/confirm")

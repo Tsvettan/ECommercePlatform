@@ -6,7 +6,6 @@ import bg.softuni.ECommercePlatform.model.ConfirmationToken;
 import bg.softuni.ECommercePlatform.model.UserEntity;
 import bg.softuni.ECommercePlatform.repository.ConfirmationTokenRepository;
 import bg.softuni.ECommercePlatform.repository.UserRepository;
-import jakarta.annotation.PostConstruct;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -58,17 +57,11 @@ public class UserService {
     }
 
     public void registerUser(UserEntity user) {
-        user.setRole(Role.USER);
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        if (user.getRole() == null) {
+            user.setRole(Role.USER);  // Ensure the default role is set
+        }
+        user.setPassword(passwordEncoder.encode(user.getPassword()));  // Encrypt password before saving
         userRepository.save(user);
-
-        String token = UUID.randomUUID().toString();
-        ConfirmationToken confirmationToken = new ConfirmationToken(
-                token, user, LocalDateTime.now(), LocalDateTime.now().plusMinutes(30));
-        tokenRepository.save(confirmationToken);
-
-        String link = "http://localhost:8080/confirm?token=" + token;
-        emailService.sendConfirmationEmail(user.getEmail(), user.getUsername(), link);
     }
 
     public void confirmToken(String token) {
@@ -124,5 +117,9 @@ public class UserService {
 
     public Long getTotalUsers() {
         return userRepository.count();
+    }
+
+    public UserEntity findByUsername(String username) {
+        return null; // todo
     }
 }
