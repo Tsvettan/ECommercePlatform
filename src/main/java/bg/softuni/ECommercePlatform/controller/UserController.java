@@ -100,7 +100,7 @@ public class UserController {
             return "redirect:/register?error";
         }
 
-        return "redirect:/home?registerSuccess"; // Redirect to home page after registration
+        return "redirect:/home?registerSuccess";
     }
 
     @GetMapping("/confirm")

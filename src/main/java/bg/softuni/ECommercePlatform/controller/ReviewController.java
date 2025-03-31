@@ -49,7 +49,6 @@ public class ReviewController {
         ReviewEntity review = reviewRepository.findById(reviewId)
                 .orElseThrow(() -> new IllegalArgumentException("Review not found"));
 
-        // Ensure only the review owner can delete it
         if (!review.getUser().getId().equals(user.getId())) {
             throw new IllegalStateException("You are not allowed to delete this review");
         }

@@ -6,12 +6,15 @@ import bg.softuni.ECommercePlatform.model.ConfirmationToken;
 import bg.softuni.ECommercePlatform.model.UserEntity;
 import bg.softuni.ECommercePlatform.repository.ConfirmationTokenRepository;
 import bg.softuni.ECommercePlatform.repository.UserRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -51,7 +54,8 @@ public class UserService {
     }
 
     public void changeUserRole(Long id, Role newRole) {
-        UserEntity user = new UserEntity();
+        UserEntity user = userRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
         user.setRole(newRole);
         userRepository.save(user);
     }
@@ -120,6 +124,20 @@ public class UserService {
     }
 
     public UserEntity findByUsername(String username) {
-        return null; // todo
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
+    }
+
+    public void updateUserProfile(UserEntity updatedUser, String newPassword) {
+        UserEntity user = userRepository.findByUsername(updatedUser.getUsername())
+                .orElseThrow(() -> new UsernameNotFoundException("User not found: " + updatedUser.getUsername()));
+
+        user.setEmail(updatedUser.getEmail());
+
+        if (newPassword != null && !newPassword.isEmpty()) {
+            user.setPassword(passwordEncoder.encode(newPassword));
+        }
+
+        userRepository.save(user);
     }
 }
