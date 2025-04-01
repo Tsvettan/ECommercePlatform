@@ -1,29 +1,36 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
-    <title>Orders</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>My Orders</title>
+    <link rel="stylesheet" href="/css/global.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
 </head>
 <body>
-<h1>All Orders</h1>
-<table>
-    <thead>
-    <tr>
-        <th>ID</th>
-        <th>User ID</th>
-        <th>Order Date</th>
-        <th>Status</th>
-        <th>Actions</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="order : ${orders}">
-        <td th:text="${order.id}"></td>
-        <td th:text="${order.userId}"></td>
-        <td th:text="${order.orderDate}"></td>
-        <td th:text="${order.status}"></td>
-    </tr>
-    </tbody>
-</table>
-<a href="/">Back to Home</a>
+<div class="container mt-5">
+    <h2 class="text-center mb-4">My Orders</h2>
+
+    <div class="order-card mb-4 p-3 border rounded shadow-sm" th:each="order : ${orders}">
+        <div class="d-flex justify-content-between align-items-center">
+            <h5>Order #<span th:text="${order.id}"></span></h5>
+            <span class="badge bg-success" th:text="${order.status}"></span>
+        </div>
+        <p class="text-muted">Placed on: <span th:text="${order.orderDate}"></span></p>
+
+        <div class="row">
+            <div class="col-md-2" th:each="item : ${order.items}">
+                <img th:src="${item.product.imageUrl}" class="img-fluid rounded" alt="Product Image">
+            </div>
+        </div>
+
+        <div class="d-flex justify-content-between align-items-center mt-3">
+            <a th:href="@{'/order/' + ${order.id}}" class="btn btn-primary btn-sm">View Details</a>
+            <a th:href="@{'/track/' + ${order.id}}" class="btn btn-outline-secondary btn-sm">Track Order</a>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

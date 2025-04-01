@@ -19,14 +19,14 @@
         <ul class="nav-links" id="nav-links">
             <li><a href="/products" class="nav-btn">Shop</a></li>
             <li><a href="/cart" class="nav-btn">Cart</a></li>
-            <li th:if="${#authorization.expression('hasRole(''ADMIN'')')}"><a href="/orders"
-                                                                              class="nav-btn">Orders</a>
+            <li th:if="${#authorization.expression('isAuthenticated()')}"><a href="/orders"
+                                                                             class="nav-btn">Orders</a>
             </li>
 
-            <li class="nav-right" th:if="${#authorization.expression('isAnonymous()')}">
+            <li class="nav-right">
                 <div class="dropdown">
                     <button class="dropbtn">
-                        <i></i> Log In
+                        👤 Log In
                     </button>
                     <div class="dropdown-content">
                         <form action="/login" method="post">
@@ -58,10 +58,10 @@
             </li>
         </ul>
 
-<!--        <div class="navbar-auth">-->
-<!--            <a href="/login" class="btn-auth btn-login">Login</a>-->
-<!--            <a href="/register" class="btn-auth btn-register">Register</a>-->
-<!--        </div>-->
+        <!--        <div class="navbar-auth">-->
+        <!--            <a href="/login" class="btn-auth btn-login">Login</a>-->
+        <!--            <a href="/register" class="btn-auth btn-register">Register</a>-->
+        <!--        </div>-->
     </div>
 </nav>
 

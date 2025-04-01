@@ -62,4 +62,8 @@ public class OrderService {
                         Collectors.summingInt(order -> 1)
                 ));
     }
+
+    public List<OrderEntity> getOrdersByUsername(String username) {
+        return orderRepository.findByUsername(username);
+    }
 }

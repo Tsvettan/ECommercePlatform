@@ -28,7 +28,9 @@
 
             <li th:if="${#authorization.expression('isAnonymous()')}">
                 <div class="dropdown">
-                    <button class="dropbtn">Login / Register</button>
+                    <button class="dropbtn">
+                        👤 Login / Register
+                    </button>
                     <div class="dropdown-content">
                         <form action="/login" method="post">
                             <label>
@@ -56,11 +58,6 @@
                 </div>
             </li>
         </ul>
-
-        <div class="navbar-auth">
-            <a href="/login" class="btn-auth btn-login">Login</a>
-            <a href="/register" class="btn-auth btn-register">Register</a>
-        </div>
     </div>
 </nav>
 
@@ -111,9 +108,27 @@
         <div class="product-info">
             <h2 th:text="${product.name}">Product Name</h2>
             <p th:text="${product.price} + ' $'">Price</p>
-            <form th:action="@{/cart/add}" method="post">
+            <form th:action="@{/cart/add}" method="post" class="product-options">
                 <input type="hidden" th:name="productId" th:value="${product.id}">
-                <input type="hidden" name="quantity" value="1">
+                <label>Size:
+                    <select name="size" required>
+                        <option value="S">S</option>
+                        <option value="M">M</option>
+                        <option value="L">L</option>
+                        <option value="XL">XL</option>
+                    </select>
+                </label>
+                <label>Color:
+                    <select name="color" required>
+                        <option value="Black">Black</option>
+                        <option value="White">White</option>
+                        <option value="Blue">Blue</option>
+                        <option value="Red">Red</option>
+                    </select>
+                </label>
+                <label>Quantity:
+                    <input type="number" name="quantity" value="1" min="1" required>
+                </label>
                 <button type="submit" class="add-to-cart">Add to Cart</button>
             </form>
         </div>

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.security.Principal;
 import java.util.List;
 
 @Controller
@@ -24,6 +25,14 @@ public class OrderController {
     public OrderController(ShoppingCartService shoppingCartService, OrderService orderService) {
         this.shoppingCartService = shoppingCartService;
         this.orderService = orderService;
+    }
+
+    @GetMapping
+    public String getOrders(Model model, Principal principal) {
+        String username = principal.getName();
+        List<OrderEntity> orders = orderService.getOrdersByUsername(username);
+        model.addAttribute("orders", orders);
+        return "orders";
     }
 
     @PostMapping("/cart/checkout")

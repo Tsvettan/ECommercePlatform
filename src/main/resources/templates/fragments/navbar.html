@@ -26,9 +26,11 @@
                 Dashboard</a>
             </li>
 
-            <li class="nav-right" th:if="${#authorization.expression('isAnonymous()')}">
+            <li class="nav-right">
                 <div class="dropdown">
-                    <button class="dropbtn">Login / Register</button>
+                    <button class="dropbtn">
+                        👤 Login / Register
+                    </button>
                     <div class="dropdown-content">
                         <form action="/login" method="post">
                             <label>
@@ -56,27 +58,27 @@
                 </div>
             </li>
         </ul>
-<!--        <div class="modal-overlay" id="modalOverlay">-->
-<!--            <div class="modal-login">-->
-<!--                <span class="close-login-modal" id="closeModal">&times;</span>-->
-<!--                <h2>Sign In</h2>-->
-<!--                <form action="/login" method="post">-->
-<!--                    <label>-->
-<!--                        <input type="text" name="username" placeholder="Username" required>-->
-<!--                    </label>-->
-<!--                    <label>-->
-<!--                        <input type="password" name="password" placeholder="Password" required>-->
-<!--                    </label>-->
-<!--                    <button type="submit">Login</button>-->
-<!--                </form>-->
-<!--                <p>Don't have an account? <a href="/register">Create an Account</a></p>-->
-<!--            </div>-->
-<!--        </div>-->
+        <!--        <div class="modal-overlay" id="modalOverlay">-->
+        <!--            <div class="modal-login">-->
+        <!--                <span class="close-login-modal" id="closeModal">&times;</span>-->
+        <!--                <h2>Sign In</h2>-->
+        <!--                <form action="/login" method="post">-->
+        <!--                    <label>-->
+        <!--                        <input type="text" name="username" placeholder="Username" required>-->
+        <!--                    </label>-->
+        <!--                    <label>-->
+        <!--                        <input type="password" name="password" placeholder="Password" required>-->
+        <!--                    </label>-->
+        <!--                    <button type="submit">Login</button>-->
+        <!--                </form>-->
+        <!--                <p>Don't have an account? <a href="/register">Create an Account</a></p>-->
+        <!--            </div>-->
+        <!--        </div>-->
 
-<!--        <div class="navbar-auth">-->
-<!--            <a href="/login" class="btn-auth btn-login">Login</a>-->
-<!--            <a href="/register" class="btn-auth btn-register">Register</a>-->
-<!--        </div>-->
+        <!--        <div class="navbar-auth">-->
+        <!--            <a href="/login" class="btn-auth btn-login">Login</a>-->
+        <!--            <a href="/register" class="btn-auth btn-register">Register</a>-->
+        <!--        </div>-->
     </div>
 </nav>
 
