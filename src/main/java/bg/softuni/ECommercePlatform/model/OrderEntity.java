@@ -3,7 +3,6 @@ package bg.softuni.ECommercePlatform.model;
 import bg.softuni.ECommercePlatform.enums.Status;
 import jakarta.persistence.*;
 
-import java.sql.Date;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -14,6 +13,9 @@ public class OrderEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(nullable = false)
+    private String username;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
@@ -46,6 +48,19 @@ public class OrderEntity {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    @PrePersist
+    public void prePersist() {
+        this.username = user != null ? user.getUsername() : "UNKNOWN"; // Fetch username before saving
     }
 
     public UserEntity getUser() {

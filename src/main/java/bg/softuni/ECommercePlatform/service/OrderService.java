@@ -1,13 +1,16 @@
 package bg.softuni.ECommercePlatform.service;
 
 import bg.softuni.ECommercePlatform.dto.OrderDTO;
+import bg.softuni.ECommercePlatform.enums.PaymentStatus;
 import bg.softuni.ECommercePlatform.enums.Status;
 import bg.softuni.ECommercePlatform.model.OrderEntity;
+import bg.softuni.ECommercePlatform.model.OrderItemEntity;
 import bg.softuni.ECommercePlatform.model.UserEntity;
 import bg.softuni.ECommercePlatform.repository.OrderRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -27,6 +30,20 @@ public class OrderService {
         return orderRepository.findAll().stream()
                 .map(order -> modelMapper.map(order, OrderDTO.class))
                 .collect(Collectors.toList());
+    }
+
+    public OrderEntity createOrder(UserEntity user, List<OrderItemEntity> items) {
+        if (user == null || user.getUsername() == null) {
+            throw new IllegalArgumentException("User or username cannot be null"); // ✅ Prevent NULL username
+        }
+
+        OrderEntity order = new OrderEntity();
+        order.setUser(user);
+        order.setItems(items);
+        order.setOrderDate(LocalDateTime.now());
+        order.setStatus(Status.PENDING);
+
+        return orderRepository.save(order);
     }
 
     public List<OrderEntity> getOrdersForUser(UserEntity user) {

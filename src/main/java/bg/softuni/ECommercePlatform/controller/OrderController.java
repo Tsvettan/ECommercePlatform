@@ -28,9 +28,14 @@ public class OrderController {
     }
 
     @GetMapping
-    public String getOrders(Model model, Principal principal) {
+    public String viewOrders(Model model, Principal principal) {
+        if (principal == null) {
+            return "redirect:/login";
+        }
+
         String username = principal.getName();
         List<OrderEntity> orders = orderService.getOrdersByUsername(username);
+
         model.addAttribute("orders", orders);
         return "orders";
     }
@@ -47,27 +52,13 @@ public class OrderController {
         }
     }
 
-    @GetMapping
-    public String viewOrders(@AuthenticationPrincipal UserEntity user, Model model) {
-        if (user == null) {
-            return "redirect:/login?error=Please log in to see your orders";
-        }
-
-        List<OrderEntity> orders = orderService.getOrdersForUser(user);
+    @GetMapping("/orders")
+    public String getOrders(Model model, Principal principal) {
+        String username = principal.getName();
+        List<OrderEntity> orders = orderService.getOrdersByUsername(username);
         model.addAttribute("orders", orders);
         return "orders";
     }
-
-//    @PostMapping("/place")
-//    public String placeOrder(@AuthenticationPrincipal UserEntity user, RedirectAttributes redirectAttributes) {
-//        if (user == null) {
-//            return "redirect:/login?error=Please log in to place an order";
-//        }
-//
-//        orderService.placeOrder(user);
-//        redirectAttributes.addFlashAttribute("successMessage", "Your order has been placed successfully!");
-//        return "redirect:/orders";
-//    }
 
     @GetMapping("/orders/{id}")
     public String viewOrderDetails(@PathVariable Long id, Model model) {

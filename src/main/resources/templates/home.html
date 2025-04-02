@@ -19,8 +19,12 @@
         <ul class="nav-links" id="nav-links">
             <li><a href="/products" class="nav-btn">Shop</a></li>
             <li><a href="/cart" class="nav-btn">Cart</a></li>
-            <li th:if="${#authorization.expression('isAuthenticated()')}"><a href="/orders"
-                                                                             class="nav-btn">Orders</a>
+            <li><a href="/orders" class="nav-btn">Orders</a>
+            </li>
+            <li th:if="${#authorization.expression('hasRole(''ADMIN'')')}"><a href="/admin" class="nav-btn">Admin</a>
+            </li>
+            <li th:if="${#authorization.expression('hasRole(''ADMIN'')')}"><a href="/admin-dashboard" class="nav-btn">Admin
+                Dashboard</a>
             </li>
 
             <li class="nav-right">
