@@ -41,7 +41,6 @@ public class UserController {
         return userService.getUserByUsername(principal.getName());
     }
 
-    // Edit user profile
     @PutMapping("/profile")
     public UserEntity updateProfile(Principal principal, @RequestParam String username, @RequestParam String email) {
         UserEntity user = getProfile(principal);
@@ -67,25 +66,22 @@ public class UserController {
             Model model,
             HttpServletRequest request) {
 
-        // 1️⃣ Check for validation errors
         if (bindingResult.hasErrors()) {
             return "register";  // Reload the register page if validation fails
         }
 
-        // 2️⃣ Check if username or email is already taken
         if (userService.isUsernameTaken(user.getUsername())) {
             model.addAttribute("usernameError", "Username is already taken");
             return "register";
         }
+
         if (userService.isEmailTaken(user.getEmail())) {
             model.addAttribute("emailError", "Email is already taken");
             return "register";
         }
 
-        // 3️⃣ Register user & encrypt password
         userService.registerUser(user);
 
-        // 4️⃣ Try to manually authenticate user after registration
         try {
             Authentication authRequest =
                     new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword());

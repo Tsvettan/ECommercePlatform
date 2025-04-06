@@ -14,10 +14,6 @@
     <div class="navbar-container">
         <a href="/" class="navbar-logo">ELITEWEAR</a>
 
-        <button class="menu-toggle" id="menu-toggle">
-            <span class="menu-icon"></span>
-        </button>
-
         <ul class="nav-links" id="nav-links">
             <li><a href="/" class="nav-btn">Home</a></li>
             <li><a href="/products" class="nav-btn">Shop</a></li>
@@ -90,7 +86,6 @@
     </form>
 </section>
 
-<!-- Quick Filter Buttons -->
 <section class="filter-bar">
     <a href="/products?category=men" class="filter-btn">Men</a>
     <a href="/products?category=women" class="filter-btn">Women</a>
@@ -99,7 +94,6 @@
     <a href="/products" class="filter-btn all-btn">All</a>
 </section>
 
-<!-- Products Grid -->
 <section class="products-grid">
     <div th:each="product : ${products}" class="product-card">
         <a th:href="@{/products/{id}(id=${product.id})}">
@@ -135,10 +129,8 @@
     </div>
 </section>
 
-<!-- Footer -->
 <div th:insert="fragments/footer :: footer"></div>
 
-<!-- External Scripts -->
 <script src="/js/navbar.js"></script>
 <script src="/js/products.js"></script>
 <script src="/js/modal.js"></script>

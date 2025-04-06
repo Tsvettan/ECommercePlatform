@@ -62,10 +62,20 @@ public class UserService {
 
     public void registerUser(UserEntity user) {
         if (user.getRole() == null) {
-            user.setRole(Role.USER);  // Ensure the default role is set
+            user.setRole(Role.USER);
         }
-        user.setPassword(passwordEncoder.encode(user.getPassword()));  // Encrypt password before saving
-        userRepository.save(user);
+
+        if (userRepository.findByUsername(user.getUsername()).isPresent()) {
+            throw new RuntimeException("Username already exists");
+        }
+
+        UserEntity newUser = new UserEntity();
+        newUser.setUsername(user.getUsername());
+        newUser.setEmail(user.getEmail());
+        newUser.setPassword(passwordEncoder.encode(user.getPassword()));
+        newUser.setRole(Role.USER);
+
+        userRepository.save(newUser);
     }
 
     public void confirmToken(String token) {
@@ -132,7 +142,9 @@ public class UserService {
         UserEntity user = userRepository.findByUsername(updatedUser.getUsername())
                 .orElseThrow(() -> new UsernameNotFoundException("User not found: " + updatedUser.getUsername()));
 
+        user.setUsername(updatedUser.getUsername());
         user.setEmail(updatedUser.getEmail());
+        userRepository.save(user);
 
         if (newPassword != null && !newPassword.isEmpty()) {
             user.setPassword(passwordEncoder.encode(newPassword));

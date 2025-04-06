@@ -13,7 +13,6 @@
         <h2 class="text-center">Create Your Account</h2>
         <p class="text-muted text-center">Join EliteWear for the best fashion experience</p>
 
-        <!-- Error Message -->
         <div th:if="${param.error}" class="alert alert-danger text-center">
             Registration failed. Please check your details.
         </div>
@@ -21,21 +20,27 @@
         <form method="post" action="/register" id="registerForm" novalidate>
             <div class="mb-3">
                 <label for="username" class="form-label">Username</label>
-                <input type="text" id="username" name="username" class="form-control" placeholder="Choose a username" required>
+                <input type="text" id="username" name="username" class="form-control" placeholder="Choose a username"
+                       required>
                 <div class="invalid-feedback">Username must be between 4 and 20 characters.</div>
             </div>
 
             <div class="mb-3">
                 <label for="email" class="form-label">Email</label>
-                <input type="email" id="email" name="email" class="form-control" placeholder="Enter your email" required>
+                <input type="email" id="email" name="email" class="form-control" placeholder="Enter your email"
+                       required>
                 <div class="invalid-feedback">Please enter a valid email address.</div>
             </div>
 
             <div class="mb-3 position-relative">
                 <label for="password" class="form-label">Password</label>
-                <input type="password" id="password" name="password" class="form-control" placeholder="Create a password" required>
-                <button type="button" class="btn btn-sm btn-outline-secondary toggle-password" onclick="togglePassword('password')">Show</button>
-                <small class="form-text text-muted">Must be at least 6 characters, including letters and numbers.</small>
+                <input type="password" id="password" name="password" class="form-control"
+                       placeholder="Create a password" required>
+                <button type="button" class="btn btn-sm btn-outline-secondary toggle-password"
+                        onclick="togglePassword('password')">Show
+                </button>
+                <small class="form-text text-muted">Must be at least 6 characters, including letters and
+                    numbers.</small>
                 <div class="invalid-feedback">Password must meet the requirements.</div>
                 <div id="passwordStrength" class="form-text text-muted"></div>
             </div>

@@ -6,7 +6,6 @@ function togglePassword(inputId) {
     }
 }
 
-// Register Form Validation
 const registerForm = document.getElementById("registerForm");
 if (registerForm) {
     registerForm.addEventListener("submit", function (e) {
@@ -41,7 +40,7 @@ if (registerForm) {
         }
 
         if (!isValid) {
-            e.preventDefault(); // Prevent form submission if validation fails
+            e.preventDefault();
         }
     });
 
