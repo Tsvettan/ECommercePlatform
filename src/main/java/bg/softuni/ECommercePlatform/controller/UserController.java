@@ -6,11 +6,13 @@ import bg.softuni.ECommercePlatform.model.UserEntity;
 import bg.softuni.ECommercePlatform.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
+import org.springframework.boot.ansi.AnsiOutput;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -24,10 +26,12 @@ public class UserController {
 
     private final UserService userService;
     private final AuthenticationManager authenticationManager;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserController(UserService userService, AuthenticationManager authenticationManager) {
+    public UserController(UserService userService, AuthenticationManager authenticationManager, PasswordEncoder passwordEncoder) {
         this.userService = userService;
         this.authenticationManager = authenticationManager;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @GetMapping
@@ -67,7 +71,7 @@ public class UserController {
             HttpServletRequest request) {
 
         if (bindingResult.hasErrors()) {
-            return "register";  // Reload the register page if validation fails
+            return "register";
         }
 
         if (userService.isUsernameTaken(user.getUsername())) {
@@ -79,6 +83,8 @@ public class UserController {
             model.addAttribute("emailError", "Email is already taken");
             return "register";
         }
+
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
 
         userService.registerUser(user);
 
@@ -93,10 +99,11 @@ public class UserController {
 
         } catch (Exception e) {
             e.printStackTrace();
-            return "redirect:/register?error";
+            model.addAttribute("authError", "Failed to log in after registration.");
+            return "register";
         }
 
-        return "redirect:/home?registerSuccess";
+        return "redirect:/home?registerSuccess";  // Redirect user after successful registration
     }
 
     @GetMapping("/confirm")

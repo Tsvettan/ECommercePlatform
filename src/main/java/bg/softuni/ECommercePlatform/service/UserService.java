@@ -14,8 +14,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -25,14 +23,12 @@ public class UserService {
     private final ModelMapper modelMapper;
     private final PasswordEncoder passwordEncoder;
     private final ConfirmationTokenRepository tokenRepository;
-    private final EmailService emailService;
 
     public UserService(UserRepository userRepository, ModelMapper modelMapper, PasswordEncoder passwordEncoder, ConfirmationTokenRepository tokenRepository, EmailService emailService) {
         this.userRepository = userRepository;
         this.modelMapper = modelMapper;
         this.passwordEncoder = passwordEncoder;
         this.tokenRepository = tokenRepository;
-        this.emailService = emailService;
     }
 
     private UserDTO convertToDTO(UserEntity user) {
@@ -87,10 +83,10 @@ public class UserService {
         }
 
         UserEntity user = confirmationToken.getUser();
-        user.setRole(Role.USER);                                        // Activate user
+        user.setRole(Role.USER);
         userRepository.save(user);
 
-        tokenRepository.delete(confirmationToken);                      // Remove token after confirmation
+        tokenRepository.delete(confirmationToken);
     }
 
     public void deleteUser(Long id) {
