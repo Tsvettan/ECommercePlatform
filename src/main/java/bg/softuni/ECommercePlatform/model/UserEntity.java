@@ -50,6 +50,10 @@ public class UserEntity implements UserDetails {
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdAt;
 
+    private String verificationToken;
+
+    private boolean verified = false;
+
     @PrePersist
     protected void onCreate() {
         this.createdAt = new Date();
@@ -153,5 +157,21 @@ public class UserEntity implements UserDetails {
 
     public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public String getVerificationToken() {
+        return verificationToken;
+    }
+
+    public void setVerificationToken(String verificationToken) {
+        this.verificationToken = verificationToken;
+    }
+
+    public boolean isVerified() {
+        return verified;
+    }
+
+    public void setVerified(boolean verified) {
+        this.verified = verified;
     }
 }

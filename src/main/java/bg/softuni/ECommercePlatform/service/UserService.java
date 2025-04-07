@@ -8,12 +8,15 @@ import bg.softuni.ECommercePlatform.repository.ConfirmationTokenRepository;
 import bg.softuni.ECommercePlatform.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.modelmapper.ModelMapper;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -23,12 +26,14 @@ public class UserService {
     private final ModelMapper modelMapper;
     private final PasswordEncoder passwordEncoder;
     private final ConfirmationTokenRepository tokenRepository;
+    private final JavaMailSender mailSender;
 
-    public UserService(UserRepository userRepository, ModelMapper modelMapper, PasswordEncoder passwordEncoder, ConfirmationTokenRepository tokenRepository, EmailService emailService) {
+    public UserService(UserRepository userRepository, ModelMapper modelMapper, PasswordEncoder passwordEncoder, ConfirmationTokenRepository tokenRepository, EmailService emailService, JavaMailSender mailSender) {
         this.userRepository = userRepository;
         this.modelMapper = modelMapper;
         this.passwordEncoder = passwordEncoder;
         this.tokenRepository = tokenRepository;
+        this.mailSender = mailSender;
     }
 
     private UserDTO convertToDTO(UserEntity user) {
@@ -67,11 +72,22 @@ public class UserService {
 
         UserEntity newUser = new UserEntity();
         newUser.setUsername(user.getUsername());
+        user.setVerificationToken(UUID.randomUUID().toString());
         newUser.setEmail(user.getEmail());
         newUser.setPassword(passwordEncoder.encode(user.getPassword()));
         newUser.setRole(Role.USER);
+        sendVerificationEmail(user);
 
         userRepository.save(newUser);
+    }
+
+    private void sendVerificationEmail(UserEntity user) {
+        String link = "http://localhost:8080/verify?token=" + user.getVerificationToken();
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(user.getEmail());
+        message.setSubject("Verify Your Email");
+        message.setText("Click the link to verify: " + link);
+        mailSender.send(message);
     }
 
     public void confirmToken(String token) {
