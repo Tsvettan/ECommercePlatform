@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>ELITEWEAR | Account</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/navbar.css">
+    <link rel="stylesheet" href="/css/profile.css">
+    <link rel="stylesheet" href="/css/footer.css">
+</head>
+<body>
+<nav class="elite-navbar">
+    <div class="navbar-container">
+        <a href="/" class="navbar-logo">ELITEWEAR</a>
+
+        <ul class="nav-links" id="nav-links">
+            <li><a href="/products" class="nav-btn">Shop</a></li>
+            <li><a href="/cart" class="nav-btn">Cart</a></li>
+            <li><a href="/orders" class="nav-btn">Orders</a>
+            </li>
+            <li th:if="${#authorization.expression('hasRole(''ADMIN'')')}"><a href="/admin" class="nav-btn">Admin</a>
+            </li>
+            <li th:if="${#authorization.expression('hasRole(''ADMIN'')')}"><a href="/admin-dashboard" class="nav-btn">Admin
+                Dashboard</a>
+            </li>
+
+            <li class="nav-right">
+                <div class="dropdown">
+                    <button class="dropbtn">
+                        👤 Sign In
+                    </button>
+                    <div class="dropdown-content">
+                        <form action="/login" method="post">
+                            <label>
+                                <input type="text" name="username" placeholder="Username">
+                            </label>
+                            <label>
+                                <input type="password" name="password" placeholder="Password">
+                            </label>
+                            <button type="submit">Login</button>
+                        </form>
+                        <a href="/register">Create an account</a>
+                    </div>
+                </div>
+            </li>
+
+            <li th:if="${#authorization.expression('isAuthenticated()')}">
+                <div class="dropdown">
+                    <button class="dropbtn">
+                        <i class="fa fa-user"></i> My Account
+                    </button>
+                    <div class="dropdown-content">
+                        <a href="/profile">Profile</a>
+                        <form action="/logout" method="post">
+                            <button type="submit">Logout</button>
+                        </form>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<div class="profile-container">
+    <h2>Edit Profile</h2>
+
+    <form action="/profile/update" method="post">
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" value="${user.username}" required>
+
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" value="${user.email}" required>
+
+        <label for="password">New Password:</label>
+        <input type="password" id="password" name="password" placeholder="Leave blank to keep current password">
+
+        <label for="role">Role:</label>
+        <input type="text" id="role" name="role" value="${user.role}" readonly>
+
+        <div class="admin-fields" th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
+            <label for="adminCode">Admin Code:</label>
+            <input type="text" id="adminCode" name="adminCode" value="${user.adminCode}">
+        </div>
+
+        <button type="submit">Save Changes</button>
+    </form>
+</div>
+
+<div th:insert="fragments/footer :: footer"></div>
+
+<script src="/js/navbar.js"></script>
+<script src="/js/modal.js"></script>
+</body>
+</html>

@@ -1,0 +1,188 @@
+.elite-navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 40px;
+    background: white;
+    backdrop-filter: blur(15px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+    transition: all 0.3s ease-in-out;
+}
+
+/* Navbar Container */
+.navbar-container {
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.navbar-logo {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: black;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: color 0.3s ease-in-out;
+}
+
+.navbar-logo:hover {
+    color: #c8a976;
+}
+
+.nav-links {
+    display: flex;
+    align-items: center;
+    list-style: none;
+    gap: 30px;
+    flex-grow: 1;
+    justify-content: center;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: black;
+    font-weight: bold;
+    font-size: 1.2rem;
+    text-transform: uppercase;
+    transition: all 0.3s;
+    padding: 10px 20px;
+    border-radius: 10px;
+}
+
+.nav-links a:hover {
+    background-color: #c8a976;
+    color: white;
+    transform: scale(1.05);
+}
+
+.nav-right {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+}
+
+.dropdown {
+    position: relative;
+}
+
+.dropbtn {
+    background-color: white;
+    color: black;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+    padding: 10px 15px;
+    border-radius: 5px;
+    transition: background 0.3s ease;
+}
+
+.dropbtn:hover {
+    background-color: #c8a976;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    right: 0;  /* Ensures dropdown aligns to the right */
+    background-color: white;
+    min-width: 220px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Dropdown Form */
+.dropdown-content form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.dropdown-content input {
+    margin-bottom: 8px;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+/* Login Button */
+.dropdown-content button {
+    padding: 10px;
+    background-color: black;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: background 0.3s ease;
+}
+
+.dropdown-content button:hover {
+    background: #c8a976;
+}
+
+.dropdown-content a {
+    display: block;
+    text-align: center;
+    margin-top: 10px;
+    color: black;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1rem;
+    text-transform: uppercase;
+    transition: color 0.3s;
+}
+
+.dropdown-content a:hover {
+    color: #c8a976;
+}
+
+/* Logout Button */
+.user-dropdown button {
+    width: 100%;
+    padding: 12px;
+    background: black;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 1rem;
+    text-transform: uppercase;
+    transition: background 0.3s;
+}
+
+@media screen and (max-width: 900px) {
+    .nav-links {
+        display: none;
+        flex-direction: column;
+        background: rgba(255, 255, 255, 0.95);
+        position: absolute;
+        top: 60px;
+        left: 0;
+        width: 100%;
+        text-align: center;
+        padding: 20px 0;
+        box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .nav-links.active {
+        display: flex;
+    }
+
+    .dropdown-content {
+            width: 100%;
+            text-align: center;
+    }
+}

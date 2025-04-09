@@ -1,0 +1,107 @@
+body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #ece9e6, #ffffff);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    padding: 20px;
+}
+
+.auth-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.auth-box {
+    background: rgba(255, 255, 255, 0.8);
+    padding: 30px;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    text-align: center;
+    width: 400px;
+    animation: fadeIn 0.5s ease-in-out;
+    backdrop-filter: blur(10px);
+}
+
+.auth-box h2 {
+    font-size: 2rem;
+    margin-bottom: 15px;
+    font-weight: bold;
+    color: #333;
+}
+
+.auth-box p {
+    font-size: 1rem;
+    color: #777;
+    margin-bottom: 20px;
+}
+
+.auth-box input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    background: rgba(255, 255, 255, 0.6);
+    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s;
+}
+
+.auth-box input:focus {
+    background: rgba(255, 255, 255, 0.9);
+    outline: none;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
+}
+
+.toggle-password {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #666;
+}
+
+.btn-primary, .btn-success {
+    background: linear-gradient(135deg, #c8a976, #fad0c4);
+    width: 100%;
+    padding: 14px;
+    border-radius: 12px;
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    font-weight: bold;
+    color: white;
+    transition: all 0.3s;
+    border: none;
+}
+
+.btn-primary:hover, .btn-success:hover {
+    background: linear-gradient(135deg, #ff758c, #ff7eb3);
+    box-shadow: 0 5px 15px rgba(255, 120, 150, 0.4);
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 480px) {
+    .auth-box {
+        width: 90%;
+        padding: 20px;
+    }
+
+    .auth-box h2 {
+        font-size: 1.5rem;
+    }
+}
