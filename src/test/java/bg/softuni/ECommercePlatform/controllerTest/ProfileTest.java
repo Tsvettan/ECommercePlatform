@@ -34,6 +34,14 @@ class ProfileTest {
     @InjectMocks
     private ProfileController profileController;
 
+    @Mock
+    private Principal principal;
+
+    @Mock
+    private Model model;
+
+    private UserEntity testUser;
+
     private LoginController loginController;
 
     private RegisterController registerController;
@@ -45,6 +53,27 @@ class ProfileTest {
         loginController = new LoginController();
         registerController = new RegisterController();
         mockMvc = MockMvcBuilders.standaloneSetup(profileController, loginController, registerController).build();
+    }
+
+    @Test
+    void getProfile_ShouldReturnProfileView_WhenUserExists() {
+        when(principal.getName()).thenReturn("testuser");
+        when(userService.findByUsername("testuser")).thenReturn(testUser);
+
+        String viewName = profileController.getProfilePage(model, principal);
+
+        verify(model).addAttribute("user", testUser);
+        assertEquals("profile", viewName);
+    }
+
+    @Test
+    void updateProfile_ShouldRedirectToProfile_WhenSuccessful() {
+        when(principal.getName()).thenReturn("testuser");
+
+        String result = profileController.updateProfile(testUser, principal);
+
+        verify(userService).updateUserProfile(testUser, "testuser");
+        assertEquals("redirect:/profile?success", result);
     }
 
     @Test
